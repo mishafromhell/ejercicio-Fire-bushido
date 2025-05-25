@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Clases - Bushido Dojo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap');
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #111;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #e60012;
+      padding: 1rem;
+      text-align: center;
+      font-size: 2.2rem;
+      color: white;
+      border-bottom: 2px solid #444;
+      letter-spacing: 1px;
+    }
+    main {
+      padding: 2rem;
+    }
+    form {
+      background-color: #1e1e1e;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #e60012;
+      max-width: 650px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border-radius: 6px;
+      border: none;
+      background-color: #333;
+      color: #eee;
+    }
+    input[type="submit"] {
+      background-color: #e60012;
+      color: white;
+      margin-top: 1.5rem;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    input[type="submit"]:hover {
+      background-color: #ff2b2b;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>Registro Bushido Dojo 🥋🔥</header>
+  <main>
+    <form id="registroForm">
+      <label for="nombre">Nombre completo:</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="telefono">Teléfono:</label>
+      <input type="tel" id="telefono" name="telefono" required>
+
+      <label for="fecha">Fecha de clase:</label>
+      <input type="date" id="fecha" name="fecha" required>
+
+      <label for="hora">Horario:</label>
+      <select id="hora" name="hora" required>
+        <option value="">Selecciona un horario</option>
+        <option value="07:00 Yoga">07:00 - Yoga</option>
+        <option value="08:00 Muay Thai">08:00 - Muay Thai / MMA Teens</option>
+        <option value="09:00 Yoga">09:00 - Yoga</option>
+        <option value="10:00 Kick Boxing / Defensa Personal">10:00 - Kick Boxing / Defensa Personal</option>
+        <option value="11:00 Funcional / Jiu Jitsu">11:00 - Funcional / Jiu Jitsu</option>
+        <option value="17:00 Taekwondo Kids / MMA Teens">17:00 - Taekwondo Kids / MMA Teens</option>
+        <option value="18:00 MMA">18:00 - MMA</option>
+        <option value="19:00 Jiu Jitsu">19:00 - Jiu Jitsu</option>
+        <option value="20:00 Yoga">20:00 - Yoga</option>
+        <option value="20:30 Muay Thai">20:30 - Muay Thai</option>
+      </select>
+
+      <input type="submit" value="Registrar asistencia">
+    </form>
+  </main>
+  <footer>
+    Bushido Dojo — Sistema juvenil de registro de clases ⚔️
+  </footer>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFZVquekwTbsj_02yzVjtsw_fvykAsHdE",
+      authDomain: "e-1459-ia.firebaseapp.com",
+      projectId: "e-1459-ia",
+      storageBucket: "e-1459-ia.firebasestorage.app",
+      messagingSenderId: "979543601264",
+      appId: "1:979543601264:web:f42b9d8fe8c5f674e484b5",
+      measurementId: "G-8Y3G48LWSC"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('registroForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nombre = form.nombre.value;
+      const email = form.email.value;
+      const telefono = form.telefono.value;
+      const fecha = form.fecha.value;
+      const hora = form.hora.value;
+
+      try {
+        await addDoc(collection(db, "asistenciaDojo"), {
+          nombre,
+          email,
+          telefono,
+          fecha,
+          hora,
+          timestamp: new Date()
+        });
+        alert("✅ Registro exitoso!");
+        form.reset();
+      } catch (error) {
+        alert("❌ Error al registrar: " + error.message);
+      }
+    });
+  </script>
+</body>
+</html>
